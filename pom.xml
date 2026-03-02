@@ -12,7 +12,7 @@
 
     <modules>
         <module>libs/tungtt-lib</module>
-        <module>modules/winsv_ttpsvn</module>
+        <module>winsv_ttpsvn</module>
     </modules>
 
     <properties>
