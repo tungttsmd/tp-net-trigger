@@ -20,7 +20,7 @@ set "RUNTIME_DIR=%MODULE_DIR%\runtime"
 set "DIST_DIR=%MODULE_DIR%\dist"
 set "APP_NAME=winsv_ttpsvn"
 set "JAR_NAME=winsv_ttpsvn-1.0.0.jar"
-set "DEPLOY_DIR=%ROOT_DIR%tp-net-winsv-ttpsvn"
+set "DEPLOY_DIR=%ROOT_DIR%tp-net-trigger"
 set "JVM_MODULES=java.base,java.compiler,java.desktop,java.instrument,java.management,java.naming,java.net.http,java.prefs,java.security.jgss,java.sql,jdk.attach,jdk.jdi"
 
 echo.
@@ -141,7 +141,7 @@ if errorlevel 1 (
     echo %RED%[FAILED]%RESET% Deploy that bai!
     pause & exit /b 1
 )
-echo %GREEN%[OK]%RESET% Deployed to: tp-net-winsv-ttpsvn\
+echo %GREEN%[OK]%RESET% Deployed to: tp-net-trigger\
 
 rmdir /s /q "%DIST_DIR%"
 rmdir /s /q "%RUNTIME_DIR%"
@@ -160,7 +160,7 @@ echo.
 echo %CYAN%[INFO]%RESET% Output: %DEPLOY_DIR%\
 echo.
 echo %CYAN%[INFO]%RESET% Cau truc:
-echo         tp-net-winsv-ttpsvn\
+echo         tp-net-trigger\
 echo         ^|-- app\
 echo         ^|-- runtime\
 echo         ^|-- %APP_NAME%.exe
