@@ -82,6 +82,11 @@ public final class ConfigService {
         static final String SENSOR_WEBSERVER_HOST = prop("SENSOR_WEBSERVER_HOST");
         static final String SENSOR_WEBSERVER_RAW_PATH = prop("SENSOR_WEBSERVER_RAW_PATH");
 
+        /* ========================= ENV HEALTH NETWORK ========================== */
+
+        static final int HEALTH_NETWORK_PING_COUNT = propIntParse("HEALTH_NETWORK_PING_COUNT");
+        static final String HEALTH_NETWORK_TARGETS = prop("HEALTH_NETWORK_TARGETS");
+
         static final ConfigService INSTANCE = new ConfigService();
     }
 
@@ -204,5 +209,15 @@ public final class ConfigService {
 
     public static String SENSOR_WEBSERVER_RAW_PATH() {
         return Holder.SENSOR_WEBSERVER_RAW_PATH;
+    }
+
+    /* ========================= ENV HEALTH NETWORK ========================== */
+
+    public static int HEALTH_NETWORK_PING_COUNT() {
+        return Holder.HEALTH_NETWORK_PING_COUNT;
+    }
+
+    public static String HEALTH_NETWORK_TARGETS() {
+        return Holder.HEALTH_NETWORK_TARGETS;
     }
 }

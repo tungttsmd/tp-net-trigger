@@ -6,9 +6,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.Gson;
 
-
-import com.tpservers.Models.HardwareProfile;
-
 import tungtt.HardwareProfile.Modules.WindowsHardwareProfile;
 import tungtt.Security.Contexts.HwidProfileContext;
 import tungtt.Security.Modules.HwidGenerator;
@@ -47,90 +44,92 @@ public final class HardwareService {
 
     public static JsonObject getAll() {
 
-        return HardwareProfile.getAll();
+        Gson gson = new Gson();
+        HardwareSnapshot hw = Holder.HW_PROFILE.snapshot();
+
+        JsonObject data = new JsonObject();
+        data.addProperty("rdp", hw.rdp());
+        data.addProperty("ip", hw.ip());
+        data.add("mac", gson.toJsonTree(hw.macs()));
+        data.add("dns", gson.toJsonTree(hw.dns()));
+        data.add("cpu", gson.toJsonTree(hw.cpus()));
+        data.add("ram", gson.toJsonTree(hw.rams()));
+        data.add("gpu", gson.toJsonTree(hw.gpus()));
+        data.add("disk", gson.toJsonTree(hw.disks()));
+        data.add("motherboard", gson.toJsonTree(hw.motherboards()));
+        data.add("os", gson.toJsonTree(hw.osInfo()));
+
+        return data;
     }
 
     public static JsonObject getCpus() {
 
+        Gson gson = new Gson();
         JsonObject root = new JsonObject();
-
-        root.add("cpus", HardwareProfile.cpuList());
-
+        root.add("cpus", gson.toJsonTree(Holder.HW_PROFILE.cpuList()));
         return root;
-
     }
 
     public static JsonObject getGpus() {
 
+        Gson gson = new Gson();
         JsonObject root = new JsonObject();
-
-        root.add("gpus", HardwareProfile.gpuList());
-
+        root.add("gpus", gson.toJsonTree(Holder.HW_PROFILE.gpuList()));
         return root;
     }
 
     public static JsonObject getRams() {
 
+        Gson gson = new Gson();
         JsonObject root = new JsonObject();
-
-        root.add("rams", HardwareProfile.ramList());
-
+        root.add("rams", gson.toJsonTree(Holder.HW_PROFILE.ramList()));
         return root;
-
     }
 
     public static JsonObject getDisks() {
 
+        Gson gson = new Gson();
         JsonObject root = new JsonObject();
-
-        root.add("disks", HardwareProfile.diskList());
-
+        root.add("disks", gson.toJsonTree(Holder.HW_PROFILE.diskList()));
         return root;
-
     }
 
     public static JsonObject getMotherboard() {
 
+        Gson gson = new Gson();
         JsonObject root = new JsonObject();
-
-        root.add("motherboards", HardwareProfile.motherboardList());
-
+        root.add("motherboards", gson.toJsonTree(Holder.HW_PROFILE.motherboardList()));
         return root;
-
     }
 
     public static JsonObject getOs() {
 
+        Gson gson = new Gson();
         JsonObject root = new JsonObject();
-
-        root.add("os", HardwareProfile.os());
-
+        root.add("os", gson.toJsonTree(Holder.HW_PROFILE.osInfo()));
         return root;
-
     }
 
     public static JsonObject getNetworks() {
 
+        Gson gson = new Gson();
         JsonObject root = new JsonObject();
-
-        root.addProperty("local_ip", HardwareProfile.localIp());
-        root.addProperty("port_number", HardwareProfile.rdp());
-        root.add("dns", HardwareProfile.macAddresseList());
-        root.add("macs", HardwareProfile.macAddresseList());
-
+        root.addProperty("local_ip", Holder.HW_PROFILE.localIp());
+        root.addProperty("port_number", Holder.HW_PROFILE.rdp());
+        root.add("dns", gson.toJsonTree(Holder.HW_PROFILE.dnsServersList()));
+        root.add("macs", gson.toJsonTree(Holder.HW_PROFILE.macAddresseList()));
         return root;
     }
 
     public static JsonObject getDevices() {
 
+        Gson gson = new Gson();
         JsonObject root = new JsonObject();
-
-        root.add("cpus", HardwareProfile.cpuList());
-        root.add("rams", HardwareProfile.ramList());
-        root.add("disks", HardwareProfile.diskList());
-        root.add("gpus", HardwareProfile.gpuList());
-        root.add("motherboards", HardwareProfile.motherboardList());
-
+        root.add("cpus", gson.toJsonTree(Holder.HW_PROFILE.cpuList()));
+        root.add("rams", gson.toJsonTree(Holder.HW_PROFILE.ramList()));
+        root.add("disks", gson.toJsonTree(Holder.HW_PROFILE.diskList()));
+        root.add("gpus", gson.toJsonTree(Holder.HW_PROFILE.gpuList()));
+        root.add("motherboards", gson.toJsonTree(Holder.HW_PROFILE.motherboardList()));
         return root;
     }
 
@@ -138,17 +137,17 @@ public final class HardwareService {
 
     public static int getRdpPort() {
 
-        return HardwareProfile.rdpPort();
+        return Holder.HW_PROFILE.rdp();
     }
 
     public static String getCpuId() {
 
-        return HardwareProfile.cpuId();
+        return Holder.HW_PROFILE.hwCpuId();
     }
 
     public static String getDiskSerial() {
 
-        return HardwareProfile.diskSerial();
+        return Holder.HW_PROFILE.hwDiskSerial();
     }
 
     public static JsonObject collect() {
@@ -202,5 +201,10 @@ public final class HardwareService {
     public static HwidProfileContext getHwidProfileContext() {
 
         return Holder.HW_PROFILE_CONTEXT;
+    }
+
+    public static String getLocalIp() {
+
+        return Holder.HW_PROFILE.localIp();
     }
 }

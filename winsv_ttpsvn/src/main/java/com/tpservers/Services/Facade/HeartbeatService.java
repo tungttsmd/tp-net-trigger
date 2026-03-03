@@ -33,8 +33,8 @@ public final class HeartbeatService {
             try {
                 EnvelopeMetaContext envelopeMetacontext = new EnvelopeMetaContext(
                         hostId,
-                        ConfigService.HOST_FROM_PREFIX() + "-" + hostId + "-" + MetaRespository.hostHwid(),
-                        ConfigService.HOST_VERSION(),
+                        MetaRespository.hostFrom(),
+                        MetaRespository.hostVersion(),
                         Console.now());
 
                 EnvelopeSecureContext envelopeSecurecontext = new EnvelopeSecureContext("[coming soon]",
