@@ -2,13 +2,11 @@ com\tpservers\Services\Service$Holder.class
 com\tpservers\Services\Facade\MqttService$Holder.class
 com\tpservers\CommandHandler\Modules\Health\HealthHeartbeatModule.class
 com\tpservers\Services\Facade\SensorService$Holder.class
-com\tpservers\Models\IpMacCaching.class
 com\tpservers\Models\SensorState$Holder.class
 com\tpservers\Models\WakeOnLanSender.class
 com\tpservers\Services\Facade\LifecycleHookerService$Holder.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareNetworkModule.class
 com\tpservers\CommandHandler\Modules\Launch\LaunchCurrentVersionModule.class
-com\tpservers\Models\HardwareProfile$Holder.class
 com\tpservers\Services\Facade\CommandService.class
 com\tpservers\Core\PoolCore.class
 com\tpservers\Repositories\MetaRespository.class
@@ -19,7 +17,6 @@ com\tpservers\Services\Facade\SensorService.class
 com\tpservers\CommandHandler\Modules\Power\PowerShutdownModule.class
 com\tpservers\CommandHandler\Modules\Sensor\SensorHeartbeatModule.class
 com\tpservers\Core\RequestCore$Holder.class
-com\tpservers\Models\IpMacCaching$1.class
 com\tpservers\Services\Facade\ConfigService.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareGpuModule.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareOsModule.class
@@ -31,7 +28,7 @@ com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareDeviceModule.class
 com\tpservers\Core\PoolCore$Holder.class
 com\tpservers\Services\Facade\WorkerService$Holder.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareProfileModule.class
-com\tpservers\Models\HardwareProfile.class
+com\tpservers\CommandHandler\Modules\Profile\ProfileMacListModule.class
 com\tpservers\Services\Facade\MqttService.class
 com\tpservers\CommandHandler\Modules\Launch\LaunchUpdateModule.class
 com\tpservers\CommandHandler\Modules\Power\PowerResetModule.class
@@ -45,7 +42,9 @@ com\tpservers\Models\SensorState.class
 com\tpservers\Services\Facade\ConsoleService$Holder.class
 com\tpservers\Services\Facade\ConfigService$Holder.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareMotherboardModule.class
+com\tpservers\CommandHandler\Modules\Health\HealthNetworkModule.class
 com\tpservers\Services\Facade\ConsoleService.class
+com\tpservers\Models\WakeOnLanMacSolver.class
 com\tpservers\Services\Facade\HardwareService$Holder.class
 com\tpservers\Services\Facade\HeartbeatService.class
 com\tpservers\Services\Facade\CommandService$Holder.class
