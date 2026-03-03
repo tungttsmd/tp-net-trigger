@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import tungtt.Handler.CommandHandler.EnvelopPublisher.HeartbeatPublisher;
 import tungtt.Handler.CommandHandler.Dispatchers.CommandContext;
 
+import com.tpservers.Repositories.MetaRespository;
 import tungtt.Console.Console;
 import tungtt.Envelope.Contexts.EnvelopeMetaContext;
 import tungtt.Envelope.Contexts.EnvelopeSecureContext;
@@ -32,7 +33,7 @@ public final class HeartbeatService {
             try {
                 EnvelopeMetaContext envelopeMetacontext = new EnvelopeMetaContext(
                         hostId,
-                        ConfigService.HOST_FROM_PREFIX() + "-" + hostId + "-" + HardwareService.hwHwid(),
+                        ConfigService.HOST_FROM_PREFIX() + "-" + hostId + "-" + MetaRespository.hostHwid(),
                         ConfigService.HOST_VERSION(),
                         Console.now());
 

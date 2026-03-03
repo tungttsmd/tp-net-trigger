@@ -6,7 +6,9 @@ import tungtt.Handler.CommandHandler.Configs.CommandConfig;
 import com.tpservers.Services.Facade.CommandService;
 import com.tpservers.Services.Facade.MqttService;
 import com.tpservers.Services.Facade.ConfigService;
+import com.tpservers.Core.PoolCore;
 
+import tungtt.Broker.Mqtt.Interfaces.MqttMessageInterface;
 import tungtt.Console.Console;
 
 public final class EventHandler {
@@ -30,12 +32,12 @@ public final class EventHandler {
             return;
         }
 
-
         try {
-            MqttService.messageHandler((subscribeTopic, message) -> {
+            MqttService.onMessage((subscribeTopic, rawPayload) -> {
 
-                try {
-                    
+                String message = new String(rawPayload);
+
+                PoolCore.submitJob("mqtt-msg", () -> {
                     CommandConfig config = new CommandConfig(
                         String.valueOf(ConfigService.HOST_ID()),
                         ConfigService.HOST_FROM_PREFIX(),
@@ -46,15 +48,11 @@ public final class EventHandler {
                     CommandService
                         .getInstance()
                         .boot(config);
-                    
+
                     CommandDispatcher
                         .getInstance(config)
                         .handle(message);
-                } catch (Exception e) {
-
-                    Console.error("Message handler error: " + e.getMessage());
-                    e.printStackTrace();
-                }
+                });
             });
         } catch (Exception e) {
 

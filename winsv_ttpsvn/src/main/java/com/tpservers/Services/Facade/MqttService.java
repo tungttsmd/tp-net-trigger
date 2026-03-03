@@ -1,10 +1,14 @@
 package com.tpservers.Services.Facade;
 
-import org.eclipse.paho.client.mqttv3.IMqttClient;
+import java.util.Set;
 
-import com.google.gson.JsonObject;
-import com.tpservers.Core.MqttCore;
-import com.tpservers.Core.MqttCore.MessageHandler;
+import com.tpservers.Repositories.MetaRespository;
+import tungtt.Broker.Mqtt.Core.MqttCore;
+import tungtt.Broker.Mqtt.Configs.MqttInit;
+import tungtt.Broker.Mqtt.Configs.MqttOption;
+import tungtt.Broker.Mqtt.Facade.MqttFacade;
+import tungtt.Broker.Mqtt.Interfaces.MqttMessageInterface;
+import tungtt.Console.Console;
 
 public final class MqttService {
 
@@ -12,180 +16,94 @@ public final class MqttService {
     }
 
     private static class Holder {
+        static String CLIENT_ID;
+        static MqttFacade mqtt;
 
-        final static String MQTT_CLIENT_ID = buildClientId();
+        static final Set<String> SUB_TOPICS = Set.of(
+                ConfigService.CONTROL_TOPIC());
+    }
 
-        final static JsonObject SUB_TOPIC = new JsonObject();
-        final static JsonObject PUB_TOPIC = new JsonObject();
+    public static void start() {
 
-        static {
-            SUB_TOPIC.addProperty("control", ConfigService.CONTROL_TOPIC());
-            PUB_TOPIC.addProperty("runtime", ConfigService.RUNTIME_TOPIC());
-            PUB_TOPIC.addProperty("sensor", ConfigService.SENSOR_TOPIC());
-            PUB_TOPIC.addProperty("profile", ConfigService.PROFILE_TOPIC());
-            PUB_TOPIC.addProperty("system", ConfigService.SYSTEM_TOPIC());
-            PUB_TOPIC.addProperty("health", ConfigService.HEALTH_TOPIC());
-            PUB_TOPIC.addProperty("signal", ConfigService.SIGNAL_TOPIC());
+        Holder.CLIENT_ID = ConfigService.HOST_FROM_PREFIX() + "-" + ConfigService.HOST_ID() + "-"
+                + MetaRespository.hostHwid();
 
+        MqttInit config = new MqttInit(
+                ConfigService.MQTT_BROKER_URL(),
+                Holder.CLIENT_ID);
+
+        String username = ConfigService.MQTT_OPT_USERNAME();
+
+        Console.info("MQTT_OPT_USERNAME read from .env: " + username);
+        Console.info("MQTT_OPT_PASSWORD read from .env: " + (ConfigService.MQTT_OPT_PASSWORD() != null ? "Yes" : "No"));
+
+        MqttOption options;
+
+        if (username != null && !username.isBlank()) {
+            options = new MqttOption(
+                1,
+                false,
+                30,
+                60,
+                true,
+                username,
+                ConfigService.MQTT_OPT_PASSWORD()
+            );
+            Console.info("MQTT Auth mode is: login (user=" + username + ")");
+
+        } else {
+            Console.info("MQTT Auth mode is: anonymous");
+            options = MqttOption.defaults();
         }
 
-        final static MqttService INSTANCE = new MqttService();
-    }
+        Console.line();
 
-    public static MqttService getInstance() {
-        return Holder.INSTANCE;
-    }
+        try {
+            Holder.mqtt = MqttCore.start(config, options);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
-    /* ================= CONNECT ================= */
-
-    public static void connect() {
-        int maxRetries = 3;
-        int retries = maxRetries;
-        while (retries > 0) {
-            retries--;
+        for (String subTopic : Holder.SUB_TOPICS) {
             try {
-                if (MqttService.mqttClient() != null) {
-                    break;
-                }
-
-                MqttCore.connect(clientId());
-
-                ConsoleService.info("MQTT connected with clientId: " + clientId());
-
-                MqttService.resubscribe();
-
+                Holder.mqtt.subscribe(subTopic);
             } catch (Exception e) {
-
-                ConsoleService.error("Connect MQTT failed, attempts left: " + retries + " - " + e.getMessage());
-                if (retries == 0) {
-
-                    ConsoleService.error("MQTT connection failed after multiple attempts.");
-                }
-                try {
-
-                    ConsoleService.info("[" + retries + "/" + maxRetries + "] Retrying MQTT connection...");
-                    Thread.sleep(2000);
-                } catch (InterruptedException ie) {
-
-                    ConsoleService.info("[" + retries + "/" + maxRetries + "] Interrupted trying MQTT connection...");
-                    Thread.currentThread().interrupt();
-                }
+                throw new RuntimeException(e);
             }
         }
     }
 
-    /* ================= GETTER ================= */
+    public static void onMessage(MqttMessageInterface handler) {
+
+        if (Holder.mqtt == null) {
+            Console.error("Mqtt client chưa được khởi tạo");
+            throw new RuntimeException("onMessage error - MqttService");
+        }
+
+        Holder.mqtt.onMessage(handler);
+    }
+
+    public static void publish(String topic, String payload, int qos) {
+
+        if (Holder.mqtt == null) {
+            Console.error("Mqtt client chưa được khởi tạo");
+            throw new RuntimeException("publish error - MqttService");
+        }
+
+        try {
+            Holder.mqtt.publish(topic, payload);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public static String clientId() {
 
-        if (Holder.MQTT_CLIENT_ID == null) {
-            return buildClientId();
+        if (Holder.CLIENT_ID == null) {
+            Console.error("Mqtt client chưa được khởi tạo");
+            throw new RuntimeException("MqttService is not booted");
         }
 
-        return Holder.MQTT_CLIENT_ID;
+        return Holder.CLIENT_ID;
     }
-
-    public static JsonObject subTopic() {
-
-        return Holder.SUB_TOPIC;
-    }
-
-    public static JsonObject pubTopic() {
-
-        return Holder.PUB_TOPIC;
-    }
-
-    /* =============== CLIENT ID BUILD =============== */
-
-    private static String buildClientId() {
-
-        return ConfigService.HOST_FROM_PREFIX()
-                + "-"
-                + ConfigService.HOST_ID()
-                + "-"
-                + HardwareService.hwHwid();
-    }
-
-    /* ================= MQTT CLIENT ================= */
-    public static IMqttClient mqttClient() {
-
-        return MqttCore.getMqttClient();
-    }
-
-    /* ============== MESSAGE HANDLE ============= */
-
-    public static void messageHandler(MessageHandler handler) {
-
-        if (mqttClient() != null) {
-
-            if (handler == null) {
-
-                ConsoleService.error("Message handler cannot be null");
-                return;
-            }
-            MqttCore.setMessageHandler(handler);
-        } else {
-            ConsoleService.error("MQTT client is not initialized");
-        }
-    }
-
-    /* ================= PUBLISH ================= */
-
-    public static void publish(String topic, String message, int qos) {
-        try {
-            if (mqttClient() == null) {
-                ConsoleService.info("MQTT has not connected yet");
-                return;
-            }
-
-            try {
-                MqttCore.publish(topic, message, qos);
-            } catch (Exception e) {
-                ConsoleService.error("Publish failed: " + e.getMessage());
-            }
-        } catch (Exception e) {
-            ConsoleService.error("Publish failed: " + e.getMessage());
-        }
-    }
-
-    /* ================= SUBSCRIBE ================= */
-
-    private static void resubscribe() {
-
-        ConsoleService.info("Resubscribing init topics...");
-
-        MqttService.subscribe();
-
-        ConsoleService.info("Resubscribing finished");
-    }
-
-    private static void subscribe() {
-
-        if (mqttClient() == null) {
-            ConsoleService.info("MQTT has not connected yet");
-            return;
-        }
-
-        try {
-
-            for (String key : Holder.SUB_TOPIC.keySet()) {
-
-                var el = Holder.SUB_TOPIC.get(key);
-                if (el == null || !el.isJsonPrimitive() || !el.getAsJsonPrimitive().isString()) {
-
-                    ConsoleService.error("Invalid topic config: " + key);
-                    continue;
-                }
-                String topic = el.getAsString();
-
-                MqttCore.subscribe(topic, 0);
-
-                ConsoleService.info("Subscribed to topic: " + topic);
-            }
-            ConsoleService.info("MQTT subscribed init topics");
-        } catch (Exception e) {
-            ConsoleService.error("Subscribe failed: " + e.getMessage());
-        }
-    }
-
 }

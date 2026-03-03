@@ -1,8 +1,6 @@
 package com.tpservers.Services.Facade;
 
-import tungtt.HardwareProfile.Contexts.OsContext;
-import tungtt.HardwareProfile.Modules.WindowsHardwareProfile;
-import oshi.SystemInfo;
+import com.tpservers.Repositories.MetaRespository;
 
 public final class ConfigService {
 
@@ -20,7 +18,7 @@ public final class ConfigService {
             if (v == null || v.isBlank()) {
                 throw new IllegalStateException("Missing system property: " + key);
             }
-            return v.replace(":hostId", String.valueOf(HardwareService.hwRdp()));
+            return v.replace(":hostId", String.valueOf(MetaRespository.hostId()));
         }
 
         final static String propReplacePlus(String key) {
@@ -40,19 +38,19 @@ public final class ConfigService {
             }
         }
 
-        /* =========================== UPDATE =========================== */
-        static final String UPDATE_FOLDER = prop("UPDATE_FOLDER");
-        static final String UPDATE_RUN_FILE = prop("UPDATE_RUN_FILE");
-
         /* =========================== ENV INDENTIFY =========================== */
 
         static final String HOST_VERSION = prop("HOST_VERSION");
         static final String HOST_FROM_PREFIX = prop("HOST_FROM_PREFIX");
-        static final int HOST_ID = Integer.parseInt(HardwareService.hwRdp());
+        static final int HOST_ID = MetaRespository.hostId();
 
         /* ============================ ENV MQTT ============================ */
+
         static final String MQTT_SERVER_HOST = prop("MQTT_SERVER_HOST");
         static final int MQTT_SERVER_PORT = propIntParse("MQTT_SERVER_PORT");
+
+        static final String MQTT_OPT_USERNAME = prop("MQTT_OPT_USERNAME");
+        static final String MQTT_OPT_PASSWORD = prop("MQTT_OPT_PASSWORD");
 
         static final String CONTROL_TOPIC = propReplaceHostId("MQTT_CONTROL_TOPIC");
 
@@ -75,11 +73,9 @@ public final class ConfigService {
         /* ========================= ENV WORKER POOL ========================== */
 
         static final String POOL_WORKER_PREFIX = prop("POOL_WORKER_PREFIX");
-        static final String POOL_NAMED_THREAD_PREFIX = prop("POOL_NAMED_THREAD_PREFIX");
+        static final String POOL_WORKER_PREFIX_THREAD_NAME = prop("POOL_WORKER_PREFIX_THREAD_NAME");
         static final int POOL_WORKER_COUNT = propIntParse("POOL_WORKER_COUNT");
 
-        static final int POOL_THREAD_HEARTBEAT_EXPIRE = propIntParse("POOL_THREAD_HEARTBEAT_EXPIRE");
-        static final int POOL_THREAD_HEARTBEAT_INTERVAL = propIntParse("POOL_THREAD_HEARTBEAT_INTERVAL");
 
         /* ========================= ENV SENSOR WEB SERVER ========================== */
 
@@ -92,16 +88,6 @@ public final class ConfigService {
     public static ConfigService getInstance() {
 
         return Holder.INSTANCE;
-    }
-
-    /* ========================= UPDATE ========================== */
-
-    public static String UPDATE_FOLDER() {
-        return Holder.UPDATE_FOLDER;
-    }
-
-    public static String UPDATE_RUN_FILE() {
-        return Holder.UPDATE_RUN_FILE;
     }
 
     /* ========================= ENV IDENTIFY ========================== */
@@ -119,8 +105,25 @@ public final class ConfigService {
     }
 
     /* ========================= ENV MQTT ========================== */
+
+    public static String MQTT_SERVER_HOST() {
+        return Holder.MQTT_SERVER_HOST;
+    }
+
+    public static int MQTT_SERVER_PORT() {
+        return Holder.MQTT_SERVER_PORT;
+    }
+
     public static String MQTT_BROKER_URL() {
         return "tcp://" + Holder.MQTT_SERVER_HOST + ":" + Holder.MQTT_SERVER_PORT;
+    }
+
+    public static String MQTT_OPT_USERNAME() {
+        return Holder.MQTT_OPT_USERNAME;
+    }
+
+    public static String MQTT_OPT_PASSWORD() {
+        return Holder.MQTT_OPT_PASSWORD;
     }
 
     public static String RUNTIME_TOPIC() {
@@ -180,16 +183,9 @@ public final class ConfigService {
     }
 
     /* ========================= ENV WORKER POOL ========================== */
-    public static int POOL_THREAD_HEARTBEAT_EXPIRE() {
-        return Holder.POOL_THREAD_HEARTBEAT_EXPIRE;
-    }
 
-    public static int POOL_THREAD_HEARTBEAT_INTERVAL() {
-        return Holder.POOL_THREAD_HEARTBEAT_INTERVAL;
-    }
-
-    public static String POOL_NAMED_THREAD_PREFIX() {
-        return Holder.POOL_NAMED_THREAD_PREFIX;
+    public static String POOL_WORKER_PREFIX_THREAD_NAME() {
+        return Holder.POOL_WORKER_PREFIX_THREAD_NAME;
     }
 
     public static int POOL_WORKER_COUNT() {

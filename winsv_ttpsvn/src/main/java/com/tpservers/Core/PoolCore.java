@@ -19,7 +19,7 @@ public final class PoolCore {
 
         static final int WORKER_COUNT = ConfigService.POOL_WORKER_COUNT();
         static final String WORKER_PREFIX = ConfigService.POOL_WORKER_PREFIX();
-        static final String WORKER_PREFIX_THREAD_NAME = ConfigService.POOL_NAMED_THREAD_PREFIX();
+        static final String WORKER_PREFIX_THREAD_NAME = ConfigService.POOL_WORKER_PREFIX_THREAD_NAME();
 
         static final ThreadPoolExecutor POOL = new ThreadPoolExecutor(
                 WORKER_COUNT,
@@ -63,7 +63,7 @@ public final class PoolCore {
         return Holder.WORKER_PREFIX_THREAD_NAME;
     }
 
-    public static String getRedisWorkerPrefix() {
+    public static String getWorkerPrefix() {
         return Holder.WORKER_PREFIX;
     }
 

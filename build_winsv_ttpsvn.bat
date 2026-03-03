@@ -16,6 +16,7 @@ set "RESET=%ESC%[0m"
 set "ROOT_DIR=%~dp0"
 set "MODULE_DIR=%ROOT_DIR%winsv_ttpsvn"
 set "TARGET_DIR=%MODULE_DIR%\target"
+set "LIB_TARGET_DIR=%ROOT_DIR%\libs\tungtt-lib\target"
 set "RUNTIME_DIR=%MODULE_DIR%\runtime"
 set "DIST_DIR=%MODULE_DIR%\dist"
 set "APP_NAME=winsv_ttpsvn"
@@ -114,11 +115,13 @@ set "APP_DIR=%DIST_DIR%\%APP_NAME%"
 
 set "ENV_SRC=%MODULE_DIR%\src\main\resources\.env"
 if exist "%ENV_SRC%" (
-    copy /y "%ENV_SRC%" "%APP_DIR%\.env" > nul
+    copy /y "%ENV_SRC%" "%APP_DIR%\app\.env" > nul
     echo %GREEN%[OK]%RESET% .env sao chep thanh cong
 ) else (
     echo %YELLOW%[WARN]%RESET% Khong tim thay .env tai: %ENV_SRC%
-    echo %YELLOW%[WARN]%RESET% Hay tu dat .env vao: %APP_DIR%\
+    echo %YELLOW%[WARN]%RESET% Hay tu dat .env vao:
+    echo		tp-net-trigger\
+    echo         ^|-- app\%GREEN%.env%RESET%
 )
 
 set "RUN_SRC=%ROOT_DIR%batFile\run.bat"
@@ -146,6 +149,7 @@ echo %GREEN%[OK]%RESET% Deployed to: tp-net-trigger\
 rmdir /s /q "%DIST_DIR%"
 rmdir /s /q "%RUNTIME_DIR%"
 rmdir /s /q "%TARGET_DIR%"
+rmdir /s /q "%LIB_TARGET_DIR%"
 
 echo %GREEN%[OK]%RESET% Temp files cleaned.
 
@@ -159,13 +163,16 @@ echo %GREEN%===============================================%RESET%
 echo.
 echo %CYAN%[INFO]%RESET% Output: %DEPLOY_DIR%\
 echo.
-echo %CYAN%[INFO]%RESET% Cau truc:
+echo %CYAN%[INFO]%RESET% Cau truc folder, dung run.bat de chay:
 echo         tp-net-trigger\
 echo         ^|-- app\
 echo         ^|-- runtime\
 echo         ^|-- %APP_NAME%.exe
-echo         ^|-- .env
 echo         ^`-- run.bat
+echo.
+echo %CYAN%[INFO]%RESET% File cau hinh .env se nam tai:
+echo		tp-net-trigger\
+echo         ^|-- app\%GREEN%.env%RESET%
 echo.
 
 pause

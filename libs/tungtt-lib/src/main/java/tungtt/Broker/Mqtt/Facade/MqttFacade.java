@@ -3,6 +3,7 @@ package tungtt.Broker.Mqtt.Facade;
 import java.nio.charset.StandardCharsets;
 
 import tungtt.Broker.Mqtt.Configs.MqttInit;
+import tungtt.Broker.Mqtt.Configs.MqttOption;
 import tungtt.Broker.Mqtt.Implements.MqttClientImplement;
 import tungtt.Broker.Mqtt.Interfaces.MqttClientAdapterInterface;
 import tungtt.Broker.Mqtt.Interfaces.MqttMessageInterface;
@@ -12,12 +13,12 @@ public final class MqttFacade {
     private final MqttClientAdapterInterface client;
 
     public MqttFacade() {
-        
+
         this.client = new MqttClientImplement();
     }
 
-    public void connect(MqttInit config) throws Exception {
-        client.connect(config, null);
+    public void connect(MqttInit config, MqttOption options) throws Exception {
+        client.connect(config, options);
     }
 
     public void subscribe(String topic) throws Exception {

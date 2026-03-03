@@ -11,7 +11,7 @@ public final class WorkerService {
 
         static boolean started = false;
         final static int WORKER_COUNT = PoolCore.getWorkerCount();
-        final static String WORKER_PREFIX = PoolCore.getRedisWorkerPrefix();
+        final static String WORKER_PREFIX = PoolCore.getWorkerPrefix();
         final static String WORKER_PREFIX_THREAD_NAME = PoolCore.getWorkerPrefixThreadName();
 
         final static PoolCore POOL = PoolCore.getInstance();
@@ -64,7 +64,7 @@ public final class WorkerService {
         return Holder.WORKER_PREFIX_THREAD_NAME;
     }
 
-    public static String getRedisWorkerPrefix() {
+    public static String getWorkerPrefix() {
         return Holder.WORKER_PREFIX;
     }
 }

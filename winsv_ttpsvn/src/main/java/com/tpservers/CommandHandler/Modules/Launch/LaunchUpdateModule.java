@@ -1,28 +1,28 @@
-package com.tpservers.CommandHandler.Modules.Update;
+package com.tpservers.CommandHandler.Modules.Launch;
 
 import tungtt.Handler.CommandHandler.Dispatchers.CommandContext;
 import tungtt.Handler.CommandHandler.ModuleInterfaces.CommandModule;
 import tungtt.Handler.CommandHandler.CommandAnnotation.ModuleAnnotation;
 import tungtt.Handler.CommandHandler.EnvelopPublisher.SignalPublisher;
 import tungtt.Handler.CommandHandler.EnvelopPublisher.ReportPublisher;
+
 import tungtt.Console.Console;
 import com.tpservers.Services.Facade.CommandService;
 
 import com.google.gson.JsonObject;
 import com.tpservers.Services.Facade.ConfigService;
-import com.tpservers.Services.Facade.UpdateService;
 
 @ModuleAnnotation
-public final class UpdateCurrentVersionModule implements CommandModule {
+public final class LaunchUpdateModule implements CommandModule {
 
     @Override
     public String title() {
-        return "update";
+        return "launch";
     }
 
     @Override
     public String command() {
-        return "current-version";
+        return "launch-update";
     }
 
     @Override
@@ -40,8 +40,7 @@ public final class UpdateCurrentVersionModule implements CommandModule {
             );
 
             JsonObject runtime = new JsonObject();
-            String updateVersion = UpdateService.currentVersion();
-            runtime.addProperty("current-version", updateVersion);
+            runtime.addProperty("status", "update received");
 
             signalPublisher.publish(
                 ConfigService.SIGNAL_TARGET_KEY(),
@@ -55,6 +54,8 @@ public final class UpdateCurrentVersionModule implements CommandModule {
                 command(),
                 ctx,
                 runtime);
+
+            System.exit(80); // Trả cho Launch exit code 80 để Launch tự update
 
         } catch (Exception e) {
             Console.error(e.getMessage());

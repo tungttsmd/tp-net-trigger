@@ -50,6 +50,11 @@ public final class MqttClientImplement
         opt.setConnectionTimeout(this.options.connectionTimeout());
         opt.setKeepAliveInterval(this.options.keepAlive());
 
+        if (this.options.hasCredentials()) {
+            opt.setUserName(this.options.username());
+            opt.setPassword(this.options.password().toCharArray());
+        }
+
         client.setCallback(this);
         client.connect(opt);
     }

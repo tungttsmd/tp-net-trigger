@@ -36,7 +36,7 @@ public final class Service {
 
         /* ========== TURN MQTT SERVICE ON ============ */
         try {
-            MqttService.connect();
+            MqttService.start();
             
             Console.info("MQTT Client ID: " + MqttService.clientId() + "\n" +
                     "[1/2] MQTT Service booted successfully");

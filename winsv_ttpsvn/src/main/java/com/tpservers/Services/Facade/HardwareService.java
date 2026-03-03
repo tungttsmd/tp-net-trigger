@@ -1,5 +1,7 @@
 package com.tpservers.Services.Facade;
 
+import java.util.List;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.Gson;
@@ -27,7 +29,8 @@ public final class HardwareService {
             new HwidProfileContext(
                 Holder.HW_PROFILE.hwCpuId(),
                 Holder.HW_PROFILE.hwDiskSerial(),
-                Holder.HW_PROFILE.hwRdp());
+                Holder.HW_PROFILE.hwRdp(),
+                Holder.HW_PROFILE.macAddresseList());
 
         static final HwidGenerator HW_HWID_GEN =
             new HwidGenerator(HW_PROFILE_CONTEXT);
@@ -189,5 +192,15 @@ public final class HardwareService {
     public static String hwHwid() {
 
         return Holder.HW_HWID_GEN.build();
+    }
+
+    public static List<String> getMacAddresses() {
+
+        return Holder.HW_PROFILE.macAddresseList();
+    }
+
+    public static HwidProfileContext getHwidProfileContext() {
+
+        return Holder.HW_PROFILE_CONTEXT;
     }
 }

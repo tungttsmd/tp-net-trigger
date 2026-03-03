@@ -44,19 +44,6 @@
       <version>2.0.9</version>
     </dependency>
 
-    <!-- Thư viện Redis, giống như composer require -->
-    <dependency>
-      <groupId>redis.clients</groupId>
-      <artifactId>jedis</artifactId>
-      <version>5.1.0</version>
-    </dependency>
-
-    <!-- Thư viện Sparkle làm API JVM-->
-    <dependency>
-      <groupId>com.sparkjava</groupId>
-      <artifactId>spark-core</artifactId>
-      <version>2.9.4</version>
-    </dependency>
 
     <dependency>
       <!-- OSHI & NA– Get CPU / RAM / Disk / GPU / Main / OS / Network -->

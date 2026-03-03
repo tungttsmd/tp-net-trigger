@@ -1,28 +1,28 @@
-package com.tpservers.CommandHandler.Modules.Update;
+package com.tpservers.CommandHandler.Modules.Launch;
 
 import tungtt.Handler.CommandHandler.Dispatchers.CommandContext;
 import tungtt.Handler.CommandHandler.ModuleInterfaces.CommandModule;
 import tungtt.Handler.CommandHandler.CommandAnnotation.ModuleAnnotation;
 import tungtt.Handler.CommandHandler.EnvelopPublisher.SignalPublisher;
 import tungtt.Handler.CommandHandler.EnvelopPublisher.ReportPublisher;
-import tungtt.Console.Console;  
+
+import tungtt.Console.Console;
 import com.tpservers.Services.Facade.CommandService;
-import com.tpservers.Services.Facade.UpdateService;
 
 import com.google.gson.JsonObject;
 import com.tpservers.Services.Facade.ConfigService;
 
 @ModuleAnnotation
-public final class UpdateExecuteModule implements CommandModule {
+public final class LaunchCurrentVersionModule implements CommandModule {
 
     @Override
     public String title() {
-        return "update";
+        return "launch";
     }
 
     @Override
     public String command() {
-        return "execute";
+        return "current-version";
     }
 
     @Override
@@ -40,7 +40,9 @@ public final class UpdateExecuteModule implements CommandModule {
             );
 
             JsonObject runtime = new JsonObject();
-            runtime.addProperty("status", "update execute command received");
+            runtime.addProperty("current-version", ConfigService.HOST_VERSION());
+            runtime.addProperty("host-from-prefix", ConfigService.HOST_FROM_PREFIX());
+            runtime.addProperty("host-id", ConfigService.HOST_ID());
 
             signalPublisher.publish(
                 ConfigService.SIGNAL_TARGET_KEY(),
@@ -54,8 +56,6 @@ public final class UpdateExecuteModule implements CommandModule {
                 command(),
                 ctx,
                 runtime);
-
-            UpdateService.boot();
 
         } catch (Exception e) {
             Console.error(e.getMessage());
