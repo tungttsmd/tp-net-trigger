@@ -19,6 +19,7 @@ public final class MqttService {
         static String CLIENT_ID;
         static MqttFacade mqtt;
 
+        // SUB TOPICS INPUT
         static final Set<String> SUB_TOPICS = Set.of(
                 ConfigService.CONTROL_TOPIC());
     }
@@ -34,21 +35,22 @@ public final class MqttService {
 
         String username = ConfigService.MQTT_OPT_USERNAME();
 
-        Console.info("MQTT_OPT_USERNAME read from .env: " + username);
-        Console.info("MQTT_OPT_PASSWORD read from .env: " + (ConfigService.MQTT_OPT_PASSWORD() != null ? "Yes" : "No"));
+        Console.info("MQTT_OPT_USERNAME read from .env: " + (username != null && !username.isBlank() ? "Yes" : "No"));
+        Console.info("MQTT_OPT_PASSWORD read from .env: "
+                + (ConfigService.MQTT_OPT_PASSWORD() != null && !ConfigService.MQTT_OPT_PASSWORD().isBlank() ? "Yes"
+                        : "No"));
 
         MqttOption options;
 
         if (username != null && !username.isBlank()) {
             options = new MqttOption(
-                1,
-                false,
-                30,
-                60,
-                true,
-                username,
-                ConfigService.MQTT_OPT_PASSWORD()
-            );
+                    1,
+                    false,
+                    30,
+                    60,
+                    true,
+                    username,
+                    ConfigService.MQTT_OPT_PASSWORD());
             Console.info("MQTT Auth mode is: login (user=" + username + ")");
 
         } else {
@@ -61,6 +63,7 @@ public final class MqttService {
         try {
             Holder.mqtt = MqttCore.start(config, options);
         } catch (Exception e) {
+            Console.error("Kết nối MQTT thất bại (" + ConfigService.MQTT_BROKER_URL() + "): " + e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -71,6 +74,19 @@ public final class MqttService {
                 throw new RuntimeException(e);
             }
         }
+
+        Console.info("MQTT booted — Host Identify (mqtt client_id): " + Holder.CLIENT_ID);
+        Console.info("SUB topics:");
+        for (String t : Holder.SUB_TOPICS)
+            Console.info("  <- " + t);
+        Console.info("PUB topics:");
+        Console.info("  -> " + ConfigService.RUNTIME_TOPIC());
+        Console.info("  -> " + ConfigService.PROFILE_TOPIC());
+        Console.info("  -> " + ConfigService.HEALTH_TOPIC());
+        Console.info("  -> " + ConfigService.SENSOR_TOPIC());
+        Console.info("  -> " + ConfigService.SYSTEM_TOPIC());
+        Console.info("  -> " + ConfigService.SIGNAL_TOPIC());
+        Console.line();
     }
 
     public static void onMessage(MqttMessageInterface handler) {

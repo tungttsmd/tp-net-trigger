@@ -21,8 +21,20 @@ public final class ConfigService {
             return v.replace(":hostId", String.valueOf(MetaRespository.hostId()));
         }
 
-        final static String propReplacePlus(String key) {
-            return prop(key).replace(":hostId", "+");
+        static final String propReplaceHostIdentify(String key) {
+            String v = prop(key);
+            if (v == null || v.isBlank()) {
+                throw new IllegalStateException("Missing system property: " + key);
+            }
+            String fromPrefix = prop("HOST_FROM_PREFIX") != null ? prop("HOST_FROM_PREFIX")
+                    : "nullOn-" + MetaRespository.hostHwid();
+            String deviceType = prop("HOST_DEVICE_TYPE") != null ? prop("HOST_DEVICE_TYPE")
+                    : "nullOn-" + MetaRespository.hostHwid();
+            return v
+                    .replace(":hostFromPrefix", fromPrefix)
+                    .replace(":hostId", String.valueOf(MetaRespository.hostId()))
+                    .replace(":hostHwid", String.valueOf(MetaRespository.hostHwid()))
+                    .replace(":hostDeviceType", deviceType);
         }
 
         static final int propIntParse(String key) {
@@ -52,30 +64,23 @@ public final class ConfigService {
         static final String MQTT_OPT_USERNAME = prop("MQTT_OPT_USERNAME");
         static final String MQTT_OPT_PASSWORD = prop("MQTT_OPT_PASSWORD");
 
-        static final String CONTROL_TOPIC = propReplaceHostId("MQTT_CONTROL_TOPIC");
+        // SUB
+        static final String CONTROL_TOPIC = propReplaceHostIdentify("MQTT_CONTROL_TOPIC");
 
-        static final String RUNTIME_TOPIC = propReplaceHostId("MQTT_RUNTIME_TOPIC");
-        static final String PROFILE_TOPIC = propReplaceHostId("MQTT_PROFILE_TOPIC");
-        static final String HEALTH_TOPIC = propReplaceHostId("MQTT_HEALTH_TOPIC");
-        static final String SENSOR_TOPIC = propReplaceHostId("MQTT_SENSOR_TOPIC");
-        static final String SYSTEM_TOPIC = propReplaceHostId("MQTT_SYSTEM_TOPIC");
-        static final String SIGNAL_TOPIC = propReplaceHostId("MQTT_SIGNAL_TOPIC");
-
-        static final String SIGNAL_TARGET_KEY = propReplaceHostId("MQTT_SIGNAL_TARGET_KEY");
-
-        static final String RUNTIME_WILD_TOPIC = propReplacePlus("MQTT_RUNTIME_TOPIC");
-        static final String SENSOR_WILD_TOPIC = propReplacePlus("MQTT_SENSOR_TOPIC");
-        static final String PROFILE_WILD_TOPIC = propReplacePlus("MQTT_PROFILE_TOPIC");
-        static final String SYSTEM_WILD_TOPIC = propReplacePlus("MQTT_SYSTEM_TOPIC");
-        static final String HEALTH_WILD_TOPIC = propReplacePlus("MQTT_HEALTH_TOPIC");
-        static final String SIGNAL_WILD_TOPIC = propReplacePlus("MQTT_SIGNAL_TOPIC");
+        // PUB
+        static final String RUNTIME_TOPIC = propReplaceHostIdentify("MQTT_RUNTIME_TOPIC");
+        static final String PROFILE_TOPIC = propReplaceHostIdentify("MQTT_PROFILE_TOPIC");
+        static final String HEALTH_TOPIC = propReplaceHostIdentify("MQTT_HEALTH_TOPIC");
+        static final String SENSOR_TOPIC = propReplaceHostIdentify("MQTT_SENSOR_TOPIC");
+        static final String SYSTEM_TOPIC = propReplaceHostIdentify("MQTT_SYSTEM_TOPIC");
+        static final String SIGNAL_TOPIC = propReplaceHostIdentify("MQTT_SIGNAL_TOPIC");
+        static final String SIGNAL_TARGET_KEY = propReplaceHostIdentify("MQTT_SIGNAL_TARGET_KEY");
 
         /* ========================= ENV WORKER POOL ========================== */
 
         static final String POOL_WORKER_PREFIX = prop("POOL_WORKER_PREFIX");
         static final String POOL_WORKER_PREFIX_THREAD_NAME = prop("POOL_WORKER_PREFIX_THREAD_NAME");
         static final int POOL_WORKER_COUNT = propIntParse("POOL_WORKER_COUNT");
-
 
         /* ========================= ENV SENSOR WEB SERVER ========================== */
 
@@ -161,30 +166,6 @@ public final class ConfigService {
 
     public static String SIGNAL_TARGET_KEY() {
         return Holder.SIGNAL_TARGET_KEY;
-    }
-
-    public static String RUNTIME_WILD_TOPIC() {
-        return Holder.RUNTIME_WILD_TOPIC;
-    }
-
-    public static String PROFILE_WILD_TOPIC() {
-        return Holder.PROFILE_WILD_TOPIC;
-    }
-
-    public static String HEALTH_WILD_TOPIC() {
-        return Holder.HEALTH_WILD_TOPIC;
-    }
-
-    public static String SENSOR_WILD_TOPIC() {
-        return Holder.SENSOR_WILD_TOPIC;
-    }
-
-    public static String SYSTEM_WILD_TOPIC() {
-        return Holder.SYSTEM_WILD_TOPIC;
-    }
-
-    public static String SIGNAL_WILD_TOPIC() {
-        return Holder.SIGNAL_WILD_TOPIC;
     }
 
     /* ========================= ENV WORKER POOL ========================== */

@@ -33,25 +33,24 @@ public final class EventHandler {
         }
 
         try {
+
+            CommandConfig config = new CommandConfig(
+                    String.valueOf(ConfigService.HOST_ID()),
+                    ConfigService.HOST_FROM_PREFIX(),
+                    ConfigService.HOST_VERSION(),
+                    "com.tpservers.CommandHandler.Modules");
+
+            CommandService.getInstance().boot(config);
+
             MqttService.onMessage((subscribeTopic, rawPayload) -> {
 
                 String message = new String(rawPayload);
 
                 PoolCore.submitJob("mqtt-msg", () -> {
-                    CommandConfig config = new CommandConfig(
-                        String.valueOf(ConfigService.HOST_ID()),
-                        ConfigService.HOST_FROM_PREFIX(),
-                        ConfigService.HOST_VERSION(),
-                        "com.tpservers.CommandHandler.Modules"
-                    );
 
-                    CommandService
-                        .getInstance()
-                        .boot(config);
+                    Console.info(">> MQTT control command received on: " + subscribeTopic);
+                    CommandDispatcher.getInstance(config).handle(message);
 
-                    CommandDispatcher
-                        .getInstance(config)
-                        .handle(message);
                 });
             });
         } catch (Exception e) {

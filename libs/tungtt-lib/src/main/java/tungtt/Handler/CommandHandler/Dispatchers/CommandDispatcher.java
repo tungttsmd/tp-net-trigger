@@ -54,7 +54,6 @@ public final class CommandDispatcher {
         );
 
         CommandModule module = CommandRegistry.resolve(title, command);
-CommandRegistry.view();
         if (module == null) {
             Console.error("The module is an invalidated module");
             return;
