@@ -7,6 +7,8 @@ com\tpservers\Models\WakeOnLanSender.class
 com\tpservers\Services\Facade\LifecycleHookerService$Holder.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareNetworkModule.class
 com\tpservers\CommandHandler\Modules\Launch\LaunchCurrentVersionModule.class
+com\tpservers\Services\Facade\SetupService$User32.class
+com\tpservers\Services\Facade\SetupService.class
 com\tpservers\Services\Facade\CommandService.class
 com\tpservers\Core\PoolCore.class
 com\tpservers\Repositories\MetaRespository.class
@@ -17,6 +19,7 @@ com\tpservers\Services\Facade\SensorService.class
 com\tpservers\CommandHandler\Modules\Power\PowerShutdownModule.class
 com\tpservers\CommandHandler\Modules\Sensor\SensorHeartbeatModule.class
 com\tpservers\Core\RequestCore$Holder.class
+com\tpservers\App$Kernel32.class
 com\tpservers\Services\Facade\ConfigService.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareGpuModule.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareOsModule.class
@@ -30,6 +33,7 @@ com\tpservers\Services\Facade\WorkerService$Holder.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareProfileModule.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileMacListModule.class
 com\tpservers\Services\Facade\MqttService.class
+com\tpservers\CommandHandler\Modules\Launch\LaunchDeviceTypeModule.class
 com\tpservers\CommandHandler\Modules\Launch\LaunchUpdateModule.class
 com\tpservers\CommandHandler\Modules\Power\PowerResetModule.class
 com\tpservers\Repositories\MetaRespository$Holder.class
