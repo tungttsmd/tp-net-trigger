@@ -92,6 +92,10 @@ public final class ConfigService {
         static final int HEALTH_NETWORK_PING_COUNT = propIntParse("HEALTH_NETWORK_PING_COUNT");
         static final String HEALTH_NETWORK_TARGETS = prop("HEALTH_NETWORK_TARGETS");
 
+        /* ========================= ENV WALLPAPER ========================== */
+
+        static final String WALLPAPER_URL = prop("WALLPAPER_URL");
+
         static final ConfigService INSTANCE = new ConfigService();
     }
 
@@ -201,4 +205,11 @@ public final class ConfigService {
     public static String HEALTH_NETWORK_TARGETS() {
         return Holder.HEALTH_NETWORK_TARGETS;
     }
+
+    /* ========================= ENV WALLPAPER ========================== */
+
+    public static String WALLPAPER_URL() {
+        return Holder.WALLPAPER_URL;
+    }
 }
+
