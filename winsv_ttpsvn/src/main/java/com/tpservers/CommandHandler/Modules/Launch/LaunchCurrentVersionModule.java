@@ -22,7 +22,7 @@ public final class LaunchCurrentVersionModule implements CommandModule {
 
     @Override
     public String command() {
-        return "current-version";
+        return "launch-current-version";
     }
 
     @Override
