@@ -56,6 +56,10 @@ public final class ConfigService {
         static final String HOST_FROM_PREFIX = prop("HOST_FROM_PREFIX");
         static final int HOST_ID = MetaRespository.hostId();
 
+        /* =========================== ENV NODE ONLY (NOT AGENT) =========================== */
+
+        static final String HOST_DEVICE_TYPE = prop("HOST_DEVICE_TYPE");
+
         /* ============================ ENV MQTT ============================ */
 
         static final String MQTT_SERVER_HOST = prop("MQTT_SERVER_HOST");
@@ -116,6 +120,12 @@ public final class ConfigService {
 
     public static int HOST_ID() {
         return Holder.HOST_ID;
+    }
+
+    /* ========================= ENV NODE ONLY (NOT AGENT) ========================== */
+
+    public static String HOST_DEVICE_TYPE() {
+        return Holder.HOST_DEVICE_TYPE;
     }
 
     /* ========================= ENV MQTT ========================== */

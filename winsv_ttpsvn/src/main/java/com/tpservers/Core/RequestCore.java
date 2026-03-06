@@ -35,39 +35,24 @@ public class RequestCore {
             connection.setDoOutput(true);
             Console.info("Request URL: " + url);
             Console.info("Request Method: " + connection.getRequestMethod());
-            Console.info("Request Do Output: " + connection.getDoOutput());
         } catch (Exception e) {
 
-            Console.error("Request failed");
+            Console.error("Request lost connection");
             Console.error("Request error message: " + e.getMessage());
             e.printStackTrace();
         }
 
         /* ========= HEADERS ======== */
 
-        if (headers != null) {
-            headers.addProperty("Content-Type", "application/json");
-            Console.info("[HEADER] COUNT: " + headers.size());
-            Console.info("[HEADER] CONTENT-TYPE: " + headers.get("Content-Type").getAsString());
-            Console.info("[HEADER] " + JsonConsole.toJson(headers));
-            int i = 1;
-
-            for (String key : headers.keySet()) {
-
-                connection.setRequestProperty(key, headers.get(key).getAsString());
-                Console.info("[HEADER] " + i++ + ". " + key + ": " + headers.get(key).getAsString());
-            }
-        }
-
         /* ========= PAYLOAD ========= */
 
         try (OutputStream outStream = connection.getOutputStream()) {
 
             outStream.write(payload.toString().getBytes());
-            Console.info("[PAYLOAD] " + JsonConsole.toJson(payload));
+            Console.info("  >> PAYLOAD: " + JsonConsole.toJson(payload));
         } catch (Exception e) {
 
-            Console.error("Request failed");
+            Console.error("Request lost connection");
             Console.error("Request error message: " + e.getMessage());
             e.printStackTrace();
             return null;
@@ -80,7 +65,7 @@ public class RequestCore {
             return new String(connection.getInputStream().readAllBytes());
         } catch (Exception e) {
 
-            Console.error("Request failed");
+            Console.error("Request lost connection");
             Console.error("Request error message: " + e.getMessage());
             e.printStackTrace();
             return null;
