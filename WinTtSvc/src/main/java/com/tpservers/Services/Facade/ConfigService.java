@@ -68,6 +68,8 @@ public final class ConfigService {
         static final String MQTT_OPT_USERNAME = prop("MQTT_OPT_USERNAME");
         static final String MQTT_OPT_PASSWORD = prop("MQTT_OPT_PASSWORD");
 
+        static final int MQTT_INIT_MAX_FAIL_TO_REBOOT = propIntParse("MQTT_INIT_MAX_FAIL_TO_REBOOT");
+
         // SUB
         static final String CONTROL_TOPIC = propReplaceHostIdentify("MQTT_CONTROL_TOPIC");
 
@@ -90,6 +92,7 @@ public final class ConfigService {
 
         static final String SENSOR_WEBSERVER_HOST = prop("SENSOR_WEBSERVER_HOST");
         static final String SENSOR_WEBSERVER_RAW_PATH = prop("SENSOR_WEBSERVER_RAW_PATH");
+        static final int SENSOR_MAX_FAIL_TO_REBOOT = propIntParse("SENSOR_MAX_FAIL_TO_REBOOT");
 
         /* ========================= ENV HEALTH NETWORK ========================== */
 
@@ -150,6 +153,10 @@ public final class ConfigService {
         return Holder.MQTT_OPT_PASSWORD;
     }
 
+    public static int MQTT_INIT_MAX_FAIL_TO_REBOOT() {
+        return Holder.MQTT_INIT_MAX_FAIL_TO_REBOOT;
+    }
+
     public static String RUNTIME_TOPIC() {
         return Holder.RUNTIME_TOPIC;
     }
@@ -204,6 +211,10 @@ public final class ConfigService {
 
     public static String SENSOR_WEBSERVER_RAW_PATH() {
         return Holder.SENSOR_WEBSERVER_RAW_PATH;
+    }
+
+    public static int SENSOR_MAX_FAIL_TO_REBOOT() {
+        return Holder.SENSOR_MAX_FAIL_TO_REBOOT;
     }
 
     /* ========================= ENV HEALTH NETWORK ========================== */

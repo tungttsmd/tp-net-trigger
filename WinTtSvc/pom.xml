@@ -11,9 +11,9 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>winsv_ttpsvn</artifactId>
+  <artifactId>WinTtSvc</artifactId>
 
-  <name>winsv_ttpsvn</name>
+  <name>WinTtSvc</name>
   <url>https://www.tpservers.com</url>
 
   <properties>

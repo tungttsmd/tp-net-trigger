@@ -2,6 +2,7 @@ package com.tpservers.Services.Facade;
 
 import com.google.gson.JsonObject;
 import com.tpservers.Models.SensorState;
+import tungtt.Console.Console;
 
 public final class SensorService {
     private SensorService() {
@@ -10,6 +11,7 @@ public final class SensorService {
 
     static class Holder {
         static final SensorService INSTANCE = new SensorService();
+        static int sensorFailCount = 0;
     }
 
     public static SensorService getInstance() {
@@ -31,7 +33,18 @@ public final class SensorService {
 
     public static JsonObject shortedSensorData() {
 
-        return SensorState.shortedSensorData();
+        JsonObject result = SensorState.shortedSensorData();
+        if (result == null || result.size() == 0) {
+            Holder.sensorFailCount++;
+            Console.error("SensorService — dotnet webserver unreachable (" + Holder.sensorFailCount + "/" + ConfigService.SENSOR_MAX_FAIL_TO_REBOOT() + ")");
+            if (Holder.sensorFailCount >= ConfigService.SENSOR_MAX_FAIL_TO_REBOOT()) {
+                Console.error("SensorService — dotnet webserver dead. Exiting for reboot...");
+                System.exit(95);
+            }
+        } else {
+            Holder.sensorFailCount = 0;
+        }
+        return result;
     }
     /* ====================== SENSORS ============================ */
 

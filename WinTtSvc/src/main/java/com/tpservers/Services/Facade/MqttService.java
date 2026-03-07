@@ -60,11 +60,20 @@ public final class MqttService {
 
         Console.line();
 
+        // Ở lần boot đầu tiên của MQTT Paho, Paho không hỗ trợ retry, bản thân phải tự làm
+        
+        int retryboot = 0;
+
         while (true) {
             try {
+                if (retryboot >= ConfigService.MQTT_INIT_MAX_FAIL_TO_REBOOT()) {
+                    Console.error("Restarting app because retryboot for mqtt reached max");
+                    System.exit(95);
+                }
                 Holder.mqtt = MqttCore.start(config, options);
                 break;
             } catch (Exception e) {
+                retryboot++;
                 Console.error("Failed to connect MQTT, retry in 5s: " + e.getMessage());
                 try { Thread.sleep(5000); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
             }

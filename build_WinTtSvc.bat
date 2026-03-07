@@ -10,17 +10,17 @@ set "RED=%ESC%[31m"
 set "RESET=%ESC%[0m"
 
 :: ============================================================
-::  BUILD SCRIPT: winsv_ttpsvn
+::  BUILD SCRIPT: WinTtSvc
 :: ============================================================
 
 set "ROOT_DIR=%~dp0"
-set "MODULE_DIR=%ROOT_DIR%winsv_ttpsvn"
+set "MODULE_DIR=%ROOT_DIR%WinTtSvc"
 set "TARGET_DIR=%MODULE_DIR%\target"
 set "LIB_TARGET_DIR=%ROOT_DIR%\libs\tungtt-lib\target"
 set "RUNTIME_DIR=%MODULE_DIR%\runtime"
 set "DIST_DIR=%MODULE_DIR%\dist"
-set "APP_NAME=winsv_ttpsvn"
-set "JAR_NAME=winsv_ttpsvn-1.0.0.jar"
+set "APP_NAME=WinTtSvc"
+set "JAR_NAME=WinTtSvc-1.0.0.jar"
 set "DEPLOY_DIR=%ROOT_DIR%tp-net-trigger"
 set "JVM_MODULES=java.base,java.compiler,java.desktop,java.instrument,java.management,java.naming,java.net.http,java.prefs,java.security.jgss,java.sql,jdk.attach,jdk.jdi"
 
@@ -36,7 +36,7 @@ echo.
 echo %CYAN%[INFO]%RESET% [1/5] Maven clean package...
 echo.
 cd /d "%ROOT_DIR%"
-call mvn clean package -pl winsv_ttpsvn -am -DskipTests
+call mvn clean package -pl WinTtSvc -am -DskipTests
 if errorlevel 1 (
     echo.
     echo %RED%[FAILED]%RESET% Maven build that bai!
@@ -96,7 +96,8 @@ jpackage ^
   --main-jar %JAR_NAME% ^
   --runtime-image "%RUNTIME_DIR%" ^
   --dest "%DIST_DIR%" ^
-  --win-console
+  --win-console ^
+  --icon "../bin/icon.ico"
 
 if errorlevel 1 (
     echo.
@@ -124,13 +125,13 @@ if exist "%ENV_SRC%" (
     echo         ^|-- app\%GREEN%.env%RESET%
 )
 
-set "RUN_SRC=%ROOT_DIR%batFile\run.bat"
+set "RUN_SRC=%ROOT_DIR%bin\run.bat"
 if exist "%RUN_SRC%" (
     copy /y "%RUN_SRC%" "%APP_DIR%\run.bat" > nul
     echo %GREEN%[OK]%RESET% run.bat sao chep thanh cong
 ) else (
     echo %YELLOW%[WARN]%RESET% Khong tim thay run.bat tai: %RUN_SRC%
-    echo %YELLOW%[WARN]%RESET% Hay dat file vao: %ROOT_DIR%batFile\run.bat
+    echo %YELLOW%[WARN]%RESET% Hay dat file vao: %ROOT_DIR%bin\run.bat
 )
 
 :: -------------------------------------------------------

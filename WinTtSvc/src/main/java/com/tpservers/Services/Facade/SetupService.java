@@ -24,6 +24,19 @@ public final class SetupService {
         }
     }
 
+    public static void reapply() {
+        try {
+            String jarDir = Paths.get(
+                SetupService.class.getProtectionDomain().getCodeSource().getLocation().toURI()
+            ).getParent().toString();
+            Path wallpaperFile = Paths.get(jarDir + "\\wallpaper\\wallpaper.jpg");
+            Files.deleteIfExists(wallpaperFile);
+            applyWallpaper(ConfigService.WALLPAPER_URL());
+        } catch (Exception e) {
+            Console.error("Failed to reapply wallpaper: " + e.getMessage());
+        }
+    }
+
     private static void applyWallpaper(String imageUrl) throws Exception {
         if (imageUrl == null || imageUrl.isEmpty()) return;
 

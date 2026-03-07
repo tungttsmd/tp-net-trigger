@@ -4,6 +4,7 @@ import com.tpservers.Services.Facade.HeartbeatService;
 import com.tpservers.Services.Facade.MqttService;
 import com.tpservers.Services.Facade.WorkerService;
 import com.tpservers.Services.Facade.SetupService;
+import com.tpservers.Services.Facade.SchedulerService;
 
 import com.tpservers.Repositories.MetaRespository;
 import com.tpservers.Services.Facade.ConfigService;
@@ -36,35 +37,35 @@ public final class Service {
         Console.info("════════════════════════════════════════");
         Console.line();
 
+        Console.info("[DEV Note] The methods for handling service faulty restarts and retries are located in the error handling section of each Facade Service (source code)");
+        Console.info("[DEV Note] Please do not spaghetti developing the methods for restarting and retrying faulty services to any location other than the Facade Service (source code)");
+        Console.line();
+
         /* ========== MQTT ============ */
         Console.info("[1/3] Starting MQTT Service...");
-        try {
-            MqttService.start();
-            Console.info("[1/3] MQTT Service — OK");
-        } catch (Exception e) {
-            Console.error("[1/3] MQTT Service — FAILED: " + e.getMessage());
-        }
+        MqttService.start();
+        Console.info("[1/3] MQTT Service — OK");
         Console.line();
 
         /* ========== WORKER POOL ============ */
         Console.info("[2/3] Starting Worker Pool...");
-        try {
-            WorkerService.start();
-            Console.info("[2/3] Worker Pool — OK  (workers: " + WorkerService.getWorkerCount() + ")");
-        } catch (Exception e) {
-            Console.error("[2/3] Worker Pool — FAILED: " + e.getMessage());
-        }
+        WorkerService.start();
+        Console.info("[2/3] Worker Pool — OK  (workers: " + WorkerService.getWorkerCount() + ")");
         Console.line();
 
         /* ========== SET UP DEVICE ============ */
         Console.info("[3/3] Setting up device...");
         try {
+            // Dịch vụ này chỉ thực hiện một lần và có thể bỏ qua nếu fail, không được exit
             SetupService.boot();
             Console.info("[3/3] Setup Service — OK");
         } catch (Exception e) {
             Console.error("[3/3] Setup Service — FAILED: " + e.getMessage());
         }
         Console.line();
+
+        /* ========== SCHEDULER ============ */
+        SchedulerService.start();
 
         /* ========== HEARTBEAT ============ */
         HeartbeatService.start(12);
