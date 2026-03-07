@@ -1,2 +1,2 @@
 @echo off
-call "%~dp0winsv_ttpsvn.exe"
+call "%~dp0WinTtSvc.exe"

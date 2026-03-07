@@ -21,6 +21,7 @@ com\tpservers\CommandHandler\Modules\Sensor\SensorHeartbeatModule.class
 com\tpservers\Core\RequestCore$Holder.class
 com\tpservers\App$Kernel32.class
 com\tpservers\Services\Facade\ConfigService.class
+com\tpservers\CommandHandler\Modules\Launch\LaunchSetWallpaperModule.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareGpuModule.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareOsModule.class
 com\tpservers\Services\Facade\WorkerService.class
@@ -30,6 +31,7 @@ com\tpservers\Services\Service.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareDeviceModule.class
 com\tpservers\Core\PoolCore$Holder.class
 com\tpservers\Services\Facade\WorkerService$Holder.class
+com\tpservers\Services\Facade\SchedulerService.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileHardwareProfileModule.class
 com\tpservers\CommandHandler\Modules\Profile\ProfileMacListModule.class
 com\tpservers\Services\Facade\MqttService.class
